@@ -1,0 +1,199 @@
+<!-- Auth -->
+<div id="auth-container">
+    <div class="card auth-card">
+        <h2 id="auth-title">Login</h2>
+
+        <form id="auth-form">
+            <input type="text" id="username" placeholder="Username" required />
+            <input type="password" id="password" placeholder="Password" required />
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <p id="toggle-auth">
+            Don’t have an account? <a href="#" id="switch-to-signup">Sign up</a>
+        </p>
+    </div>
+</div>
+
+<!-- Main App  -->
+<div id="app-container" style="display:none;">
+    <!doctype html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Personal Budget Tracker</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    </head>
+
+    <body>
+        <header>
+            <h1>Personal Budget Tracker</h1>
+            <div class="header-meta">
+                <label for="month-select">View month</label>
+                <input type="month" id="month-select" />
+                <button class="btn-delete" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <main class="main-grid">
+            <!-- Forms -->
+            <section class="forms">
+                <div class="card">
+                    <h2>Add Income</h2>
+                    <form id="income-form" class="form-grid">
+                        <input id="income-amount" type="number" step="0.01" placeholder="Amount" required />
+                        <select id="income-type">
+                            <option value="Salary">Salary</option>
+                            <option value="Business">Business</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <select id="income-frequency">
+                            <option value="one-time">One-time</option>
+                            <option value="daily">Daily</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                        <input id="income-date" type="date" required />
+                        <input id="income-notes" placeholder="Notes (optional)" />
+                        <button class="btn" type="submit">Save Income</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Add Expense</h2>
+                    <form id="expense-form" class="form-grid">
+                        <input id="expense-amount" type="number" step="0.01" placeholder="Amount" required />
+                        <select id="expense-category"></select>
+                        <input id="expense-date" type="date" required />
+                        <input id="expense-notes" placeholder="Notes (optional)" />
+                        <button class="btn" type="submit">Save Expense</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Set Budget</h2>
+                    <form id="budget-form" class="form-grid">
+                        <input id="budget-month" type="month" />
+                        <select id="budget-category"></select>
+                        <input id="budget-amount" type="number" step="0.01" placeholder="Budget amount" required />
+                        <button class="btn" type="submit">Save Budget</button>
+                    </form>
+                </div>
+                <div class="card transactions-feed">
+                    <h2>Transaction History</h2>
+                    <div id="transaction-history" class="history-list"></div>
+                </div>
+            </section>
+
+            <section class="dashboard">
+                <div class="card summary-card">
+                    <h2>Summary</h2>
+                    <div class="summary-items">
+                        <div><strong>Total Income</strong>
+                            <div id="total-income">0</div>
+                        </div>
+                        <div><strong>Total Expense</strong>
+                            <div id="total-expense">0</div>
+                        </div>
+                        <div><strong>Savings</strong>
+                            <div id="total-savings">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card charts-card">
+                    <h3>Income vs Expense</h3>
+                    <canvas id="incomeExpenseChart" height="120"></canvas>
+                </div>
+
+                <div class="card charts-card">
+                    <h3>Expense by Category</h3>
+                    <canvas id="expensePieChart" height="120"></canvas>
+                </div>
+
+                <div class="card charts-card">
+                    <h3>Monthly Trend</h3>
+                    <canvas id="monthlyTrendChart" height="140"></canvas>
+                </div>
+
+                <div class="card budget-card">
+                    <h3>Budgets</h3>
+                    <div id="budgets-list"></div>
+                </div>
+
+                <!-- Groups -->
+                <div class="card">
+                    <h2>Group Manager</h2>
+                    <form id="group-form">
+                        <input id="group-name" type="text" placeholder="Group Name" required />
+                        <input id="group-members" type="text" placeholder="Members (comma-separated)" required />
+                        <button type="submit" class="btn">Create Group</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Add Group Expense</h2>
+                    <form id="group-expense-form">
+                        <select id="group-select"></select>
+                        <select id="payer"></select>
+                        <input id="group-amount" type="number" step="0.01" placeholder="Amount" required />
+                        <input id="group-description" placeholder="Description" />
+                        <button type="submit" class="btn">Add Expense</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Groups List</h2>
+                    <div id="group-list"></div>
+                    <div id="group-info" class="group-info"></div>
+                </div>
+
+
+                <div class="card transactions-card">
+                    <h3>Recent Transactions</h3>
+                    <div class="tables">
+                        <div>
+                            <h4>Income</h4>
+                            <table id="income-table">
+                                <thead>
+                                    <tr>
+                                        <th>Amt</th>
+                                        <th>Type</th>
+                                        <th>Freq</th>
+                                        <th>Date</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <h4>Expense</h4>
+                            <table id="expense-table">
+                                <thead>
+                                    <tr>
+                                        <th>Amt</th>
+                                        <th>Cat</th>
+                                        <th>Date</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+        </main>
+
+        <div id="toast" class="toast"></div>
+        <script src="script.js"></script>
+    </body>
+
+    </html>
+</div>
